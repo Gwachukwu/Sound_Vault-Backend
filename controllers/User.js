@@ -2,10 +2,13 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
-exports.signUp = async (req, res,next) => {
+exports.signUp = async (req, res, next) => {
   const { username, email, password } = req.body;
   try {
-      //check if username already exists
+    if (!username || !email || !password) {
+      return res.status(400).json({ msg: "Please fill all fields" });
+    }
+    //check if username already exists
     let user = await User.findOne({ username });
     if (user) {
       return res.status(400).json({ msg: "user already exists" });
@@ -18,7 +21,7 @@ exports.signUp = async (req, res,next) => {
         message: "Email do not match correct format",
       });
     }
-    //check if email is already registered 
+    //check if email is already registered
     let userEmail = await User.findOne({ email });
     if (userEmail) {
       return res
@@ -46,7 +49,7 @@ exports.signUp = async (req, res,next) => {
       },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });//send token on successful registration
+        res.json({ token }); //send token on successful registration
       }
     );
   } catch (err) {
@@ -56,37 +59,37 @@ exports.signUp = async (req, res,next) => {
 };
 
 exports.signIn = async (req, res) => {
-    const { email, password } = req.body;
-    try {
-      let user = await User.findOne({ email });
-      if (!user) {
-        return res.status(400).json({ msg: "Incorrect email or password" });
-      }
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        return res.status(400).json({ msg: "Incorrect email or password" });
-      }
-      const payload = {
-        user: {
-          id: user.id,
-        },
-      };
-      jwt.sign(payload, process.env.SECRET, (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      });
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server Error");
+  const { email, password } = req.body;
+  try {
+    let user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ msg: "Incorrect email or password" });
     }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Incorrect email or password" });
+    }
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+    jwt.sign(payload, process.env.SECRET, (err, token) => {
+      if (err) throw err;
+      res.json({ token });
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
   }
+};
 
-  exports.userDetails = async (req, res) => {
-    try {
-      const user = await User.findById(req.user.id).select("-password");
-      return res.status(400).json(user);
-    } catch (err) {
-      console.error(err.message);
-      return res.status(500).send("Server Error");
-    }
+exports.userDetails = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    return res.status(400).json(user);
+  } catch (err) {
+    console.error(err.message);
+    return res.status(500).send("Server Error");
   }
+};
