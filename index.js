@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(userRoutes);
-app.use("/file", audioRoutes);
+app.use(audioRoutes);
 //app.use(transactionRoutes);
 //app.use(authRoutes);
 //app.use(accessRoutes);

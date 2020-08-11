@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 
-const { uploadAudio } = require("../controllers/Audio");
+const { uploadAudio, getAudioFiles } = require("../controllers/Audio");
 const auth = require("../middleware/auth");
 
 const router = express.Router();
@@ -17,5 +17,7 @@ router.post(
   }).single("media"),
   uploadAudio
 );
+
+router.get("/files", auth, getAudioFiles);
 
 module.exports = router;

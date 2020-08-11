@@ -11,9 +11,7 @@ cloudinary.config({
 exports.uploadAudio = async (req, res, next) => {
   let { name } = req.body;
   let audio = req.file;
-  //console.log(audio);
   const user_id = req.user.id;
-  //console.log('user:', user_id, 'name:', name);
   if (!name) {
     return res
       .status(400)
@@ -41,13 +39,11 @@ exports.uploadAudio = async (req, res, next) => {
       },
       async function (error, result) {
         if (error) {
-          console.log("upload error:", error);
           res.status(500).json({
             success: false,
             message: "There was an error uploading audio",
           });
         }
-        console.log(result);
         let audio_data = {
           public_ID: result.public_id,
           public_url: result.url,
@@ -72,7 +68,20 @@ exports.uploadAudio = async (req, res, next) => {
       }
     );
   } catch (error) {
-    //console.log("ERROR: ", error);
+    return res.status(500).json({
+      error: "An internal server error occured",
+    });
+  }
+};
+
+exports.getAudioFiles = async (req, res, next) => {
+  const user_id = req.user.id;
+  try {
+    const audiofiles = await Audio.find({user_id});
+    return res.status(400).json({
+      files: audiofiles      
+    });
+  } catch (error) {
     return res.status(500).json({
       error: "An internal server error occured",
     });
