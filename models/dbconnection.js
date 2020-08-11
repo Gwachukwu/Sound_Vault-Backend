@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
-require("dotenv").config({path: __dirname + '/.env'});
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
+mongoose.set("useNewUrlParser", true);
+mongoose.set("useFindAndModify", false);
+mongoose.set("useCreateIndex", true);
 
 const connectDB = async () => {
   try {

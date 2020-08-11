@@ -1,21 +1,23 @@
 const express = require("express");
-const app = express();
+require("dotenv").config();
+
 const connectDB = require("./models/dbconnection");
 //const transactionRoutes = require("./routes/transactions");
 const userRoutes = require("./routes/users");
-const audioRoutes= require("./routes/audios");
+const audioRoutes = require("./routes/audios");
 //const authRoutes = require("./routes/auth");
 //const accessRoutes = require("./routes/accessTransactions");
 const cors = require("cors");
-require("dotenv").config({path: __dirname + '/.env'});
 
+const app = express();
 
 connectDB();
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 app.use(userRoutes);
-app.use(audioRoutes);
+app.use("/file", audioRoutes);
 //app.use(transactionRoutes);
 //app.use(authRoutes);
 //app.use(accessRoutes);
