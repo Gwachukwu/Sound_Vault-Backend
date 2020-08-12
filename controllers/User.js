@@ -44,9 +44,6 @@ exports.signUp = async (req, res, next) => {
     jwt.sign(
       payload,
       process.env.SECRET,
-      {
-        expiresIn: 360000,
-      },
       (err, token) => {
         if (err) throw err;
         res.json({ token }); //send token on successful registration
