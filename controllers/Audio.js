@@ -78,7 +78,7 @@ exports.getAudioFiles = async (req, res, next) => {
   const user_id = req.user.id;
   try {
     const audiofiles = await Audio.find({user_id});
-    return res.status(400).json({
+    return res.status(200).json({
       files: audiofiles      
     });
   } catch (error) {
