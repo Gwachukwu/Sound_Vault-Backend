@@ -38,6 +38,14 @@ if (app.get("env") === "development") {
   });
 }
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Hello there! Welcome to Sound Vault.",
+    api_doc: "",
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
   console.log(`Server started on ${PORT}`);

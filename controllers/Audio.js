@@ -15,17 +15,17 @@ exports.uploadAudio = async (req, res, next) => {
   if (!name) {
     return res
       .status(400)
-      .json({ status: 400, error: "Please name your soundtrack" });
+      .json({ status: 400, message: "Please name your soundtrack" });
   }
   if (!audio) {
     return res
       .status(400)
-      .json({ status: 400, error: "Please upload a soundtrack" });
+      .json({ status: 400, message: "Please upload a soundtrack" });
   }
   if (audio.size > 5000000) {
     return res
       .status(400)
-      .json({ status: 400, error: "Please upload an audio less than 5mb" });
+      .json({ status: 400, message: "Please upload an audio less than 5mb" });
   }
   try {
     // upload audio to cloudinary
@@ -63,13 +63,13 @@ exports.uploadAudio = async (req, res, next) => {
         }
         return res.status(400).json({
           status: 400,
-          error: "Unable to add soundtrack",
+          message: "Unable to add soundtrack",
         });
       }
     );
   } catch (error) {
     return res.status(500).json({
-      error: "An internal server error occured",
+      message: "An internal server error occured",
     });
   }
 };
